@@ -1,20 +1,39 @@
 <template>
     <div class="single-post-page">
         <section class="post">
-        <h1>Title of the post</h1>
+        <h1>{{ loadedPost.title }}</h1>
         <div class="post-details">
             <div>Last Update On XXXX</div>
-            <div>Written By Name</div>
+            <div>Written By Name {{ loadedPost.author }}</div>
         </div>
         <p>Content of the post!</p>
+         <p>{{ loadedPost.previewText }}</p>
         </section>
 
         <section class="post-feedback">
         <p>Let me know about what you 🤔 Give me feedback through mail</p>
         </section>
-    </div>
+    </div> 
 </template>
 
+<script>
+export default {
+
+  data() {
+    return {
+      loadedPost: []
+    }
+  },
+
+
+  created() {
+    const postId = this.$route.params.id;
+    this.loadedPost = this.$store.getters.getPostById(postId);
+    console.log(this.loadedPost); 
+  }
+
+}
+</script>
 <style scoped>
 /** @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap'); */
 .single-post-page {

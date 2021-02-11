@@ -3,7 +3,7 @@
     <section class="intro">
       <h1>First Vue/Nuxt App!</h1>
     </section>
-    
+    <PostList :posts="loadedPost" />
 
   <nuxt-link to="/users">Users</nuxt-link>
   </div>
@@ -11,12 +11,53 @@
 </template>
 
 <script>
-import PostPreview from '@/components/Posts/PostPreview'
+import PostList from '~/components/Posts/PostList.vue'
 
 export default {
 components: { 
-    PostPreview 
-  }  
+    PostList 
+  },
+computed: {
+
+  },  
+  asyncData(context, callback) {
+        setTimeout(() => {
+          callback(null, {
+            loadedPost: [
+        {
+            id: "1",
+            title: 'My First Post',
+            author: 'Maximilan',
+            previewText: 'Supar amazing! that is amazing of first post!',
+            thumbNail: 'https://www.agilitypr.com/wp-content/uploads/2020/02/technology-1-1.jpg',
+            isAdmin: false
+        },
+        {
+            id: "2",
+            title: 'My Second Post',
+            author: 'Schamralauzer',
+            previewText: 'Supar amazing! that is amazing of second post!',
+            thumbNail: 'https://www.agilitypr.com/wp-content/uploads/2020/02/technology-1-1.jpg',
+            isAdmin: false
+        }
+      ]
+
+          })
+
+      
+    },1500)
+  },
+  data() {
+    return {
+      loadedPost: [],
+    }
+  },
+
+  created() {
+
+  }
+
+  
 }
 </script>
 
