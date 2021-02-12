@@ -27,7 +27,7 @@ computed: {
     }
   },
   mounted() {
-      this.$store.dispatch('setPosts')
+      this.$store.dispatch('nuxtServerInit')
       .then(() => {
           this.loadedPost = this.$store.getters.loadedPosts;
           console.log(this.loadedPost);

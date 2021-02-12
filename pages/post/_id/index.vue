@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
 
   data() {
@@ -24,13 +25,30 @@ export default {
       loadedPost: []
     }
   },
+ asyncData(context) {
+   //console.log(context.params.id);
+  // return axios.get('https://nuxt-js-66865-default-rtdb.firebaseio.com/posts/' + context.params.id + '.json')
+  // .then(res => {
+  //   return {
+  //     loadedPost: res.data
+  //   }
+  // }).catch(e => context.error(e))
+  
 
+},
 
-  created() {
-    const postId = this.$route.params.id;
-    this.loadedPost = this.$store.getters.getPostById(postId);
-    console.log(this.loadedPost); 
-  }
+mounted() {
+  this.$store.dispatch('getPostById', { id: this.$route.params.id })
+  .then(() => {
+    this.loadedPost = this.$store.getters.getpost;
+    console.log(this.loadedPost);
+  })
+}
+  // created() {
+  //   const postId = this.$route.params.id;
+  //   this.loadedPost = this.$store.getters.getPostById(postId);
+  //   console.log(this.loadedPost); 
+  // }
 
 }
 </script>

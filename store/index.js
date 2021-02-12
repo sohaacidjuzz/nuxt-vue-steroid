@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-
+import axios from 'axios'
 const createStore = () => {
 
     return new Vuex.Store({
@@ -12,40 +12,64 @@ const createStore = () => {
              */
             setPosts(state, payload) {
                 state.loadedPosts = [...payload];
+            },
+
+            addPost(state, post) {
+                state.loadedPosts.push({ ...post });
+            },
+            editPost(state, editedPost) {
+                const postIndex = state.loadedPosts.findIndex(post => post.id === editedPost.id );
+                state.loadedPosts[postsIndex] = editedPost;
+
+            },
+            findPost(state, payload) {
+                state.loadedPosts = payload;
             }
+            
         },
         actions: {
-            /** @params state is the loadedPosts of state property
-             * @params posts is the payload from whete it is to be committed
+            
+            /** call the api and commit it to the mutations 
              */
-            async setPosts({commit}) {
-                
-
-                return new Promise ((resolve, reject) => {
-                    setTimeout(async () => {
-                        commit('setPosts',[
-                            {
-                                id: "1",
-                                title: 'My First Post',
-                                author: 'Maximilan',
-                                previewText: 'Supar amazing! that is amazing of first post!',
-                                thumbNail: 'https://www.agilitypr.com/wp-content/uploads/2020/02/technology-1-1.jpg',
-                                isAdmin: false
-                            },
-                            {
-                                id: "2",
-                                title: 'My Second Post',
-                                author: 'Schamralauzer',
-                                previewText: 'Supar amazing! that is amazing of second post!',
-                                thumbNail: 'https://www.agilitypr.com/wp-content/uploads/2020/02/technology-1-1.jpg',
-                                isAdmin: false
-                            }
-                        ])
-
-                        resolve();
-                    }, 1000)
-                    
+            nuxtServerInit(vueContext, context) {
+                return axios.get('https://nuxt-js-66865-default-rtdb.firebaseio.com/posts.json')
+                .then(res => {
+                    const postsArray = [];
+                    for(const key in res.data) {
+                        postsArray.push({ ...res.data[key], id: key})
+                    }
+                    vueContext.commit('setPosts', postsArray);
                 })
+            },
+
+            addPost(context,postData) {
+
+               return axios.post('https://nuxt-js-66865-default-rtdb.firebaseio.com/posts.json', postData)
+            .then(response => {
+                context.commit('addPost', {...postData, id: response.data.name });
+            })
+            .catch(e => console.log(e));
+            
+            },
+
+            editPost(context, editedPost) {
+
+                return axios.put('https://nuxt-js-66865-default-rtdb.firebaseio.com/posts/' 
+                + editedPost.id 
+                + '.json', editedPost)
+                .then(res => {
+                    context.commit('editPost', editedPost)
+                })
+                .catch(e => console.log(e))
+            },
+            
+            
+            getPostById(context, payload) {
+                console.log(payload.id);
+               return axios.get('https://nuxt-js-66865-default-rtdb.firebaseio.com/posts/' + payload.id + '.json')
+                .then(res => {
+                    context.commit('findPost', {...res.data})
+            })
             }
 
 
@@ -55,10 +79,10 @@ const createStore = () => {
             loadedPosts(state) {
                 return state.loadedPosts;
             },
-
-            getPostById: (state) => (id) => {
-                return state.loadedPosts.find(element => element.id === id);
+            getpost(state) {
+                return state.loadedPosts;
             }
+
         }        
     })
 }

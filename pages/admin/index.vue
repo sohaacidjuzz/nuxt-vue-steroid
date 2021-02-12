@@ -14,7 +14,7 @@
 import AppButton from '~/components/UI/AppButton'
 import PostList from '~/components/Posts/PostList'
 export default {
-    layut: 'admin',
+    layout: 'admin',
     components: {
         PostList,
         AppButton
@@ -22,10 +22,11 @@ export default {
     data() {
       return {
         loadedPost: [],
+        isAdmin: true,
       }
     },
     mounted() {
-      this.$store.dispatch('setPosts')
+      this.$store.dispatch('nuxtServerInit')
       .then(() => {
           this.loadedPost = this.$store.getters.loadedPosts;
           console.log(this.loadedPost);
