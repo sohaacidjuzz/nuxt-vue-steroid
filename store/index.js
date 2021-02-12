@@ -19,7 +19,7 @@ const createStore = () => {
              * @params posts is the payload from whete it is to be committed
              */
             async setPosts({commit}) {
-                //vuexContext.commit('setPosts', posts);
+                
 
                 return new Promise ((resolve, reject) => {
                     setTimeout(async () => {

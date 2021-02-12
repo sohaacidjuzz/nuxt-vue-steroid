@@ -5,7 +5,7 @@
         <AppButton @click="$router.push('/admin/new-post')">Create Post</AppButton>
         </section>
         <section class="existing-posts">
-        <PostList isAdmin />
+        <PostList :posts="loadedPost" isAdmin />
         </section>
     </div>
 </template>
@@ -18,7 +18,19 @@ export default {
     components: {
         PostList,
         AppButton
-    }
+    },
+    data() {
+      return {
+        loadedPost: [],
+      }
+    },
+    mounted() {
+      this.$store.dispatch('setPosts')
+      .then(() => {
+          this.loadedPost = this.$store.getters.loadedPosts;
+          console.log(this.loadedPost);
+            })
+  },
 }
 </script>
 
