@@ -17,14 +17,26 @@ export default {
   },
 
   router: {
-    linkExactActiveClass: 'my-custom-exact-active-link'
+    linkExactActiveClass: 'my-custom-exact-active-link',
+
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: "*",
+        component: resolve(__dirname, 'pages/index.vue')
+      })
+    }
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/styles/main.css'
   ],
+/** Customizing progress bar */
+loadingIndicator: {
+  name: 'circle',
+  color: '#fa923f',
 
+},
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
   ],
@@ -40,9 +52,15 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  env: {
+    baseUrl: process.env.BASE_URL || 'https://nuxt-js-66865-default-rtdb.firebaseio.com',
+    fbAPIKey: 'AIzaSyAxA3R7bRdHkQsJajLaplZT6W0MNjBbN9M'
   }
 }

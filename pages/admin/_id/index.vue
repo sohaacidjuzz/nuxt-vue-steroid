@@ -13,18 +13,19 @@ export default {
 components: {
     AdminPostForm
 },  
-data() {
+middleware: ['check-auth','auth'],
+    data() {
         return {
         loadedPost: []
         }
     },
-     asyncData(context) {
+    asyncData(context) {
          console.log(context.params.id);
     return axios.get('https://nuxt-js-66865-default-rtdb.firebaseio.com/posts/' + context.params.id + '.json')
         .then(res => {
             
             return {
-                loadedPost: res.data
+                loadedPost: {...res.data, id: context.params.id}
             }
         }).catch(e => context.error(e))
     },
